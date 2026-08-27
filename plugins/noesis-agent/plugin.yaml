@@ -1,0 +1,9 @@
+name: noesis-agent
+version: 0.1.0
+description: "Planner-driven per-step model routing for Hermes Agent. Decomposes tasks into steps, routes each step to the optimal model (local/cheap/code/reasoning), and scopes tool schemas per step to reduce token consumption by 70-85%."
+author: "yubingz"
+kind: standalone
+provides_tools:
+  - noesis_plan_preview
+requires:
+  hermes_version: ">=0.20.0"
