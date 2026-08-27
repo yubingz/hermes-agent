@@ -1,0 +1,80 @@
+# NOESIS-Agent Configuration
+# Copy this to your Hermes config.yaml or merge the `noesis` section.
+
+noesis:
+  # Enable/disable NOESIS planner-driven routing
+  enabled: true
+
+  # Planner settings
+  planner:
+    enabled: true
+    # Minimum message length before using LLM planner (shorter = heuristic)
+    min_chars: 50
+    # Maximum steps in a plan
+    max_steps: 8
+
+  # Routing tier model assignments
+  models:
+    local:
+      provider: ollama
+      model: qwen2.5:7b
+      base_url: http://localhost:11434/v1
+      reasoning:
+        enabled: false
+      max_tokens: 2048
+
+    cheap:
+      provider: deepseek
+      model: deepseek-chat
+      api_key_env: DEEPSEEK_API_KEY
+      reasoning:
+        enabled: false
+      max_tokens: 4096
+
+    standard:
+      # Empty model = use Hermes primary model
+      provider: primary
+      model: ""
+      reasoning:
+        enabled: false
+      max_tokens: 8192
+
+    code:
+      provider: deepseek
+      model: deepseek-coder
+      api_key_env: DEEPSEEK_API_KEY
+      reasoning:
+        enabled: true
+        effort: medium
+      max_tokens: 16384
+
+    reasoning:
+      provider: primary
+      model: ""
+      reasoning:
+        enabled: true
+        effort: high
+      max_tokens: 32768
+
+  # Tool scoping settings
+  tool_scoping:
+    # Include safe default tools (read_file, list_directory) for all steps
+    include_safe_defaults: true
+    # Maximum tools per step
+    max_tools_per_step: 6
+
+  # Tier thresholds
+  tiers:
+    local:
+      max_words: 30
+    cheap:
+      max_words: 100
+
+  # Tier validation thresholds
+  upgrade_threshold: 0.5
+  downgrade_threshold: 0.95
+
+  # Memory integration (NOESIS-II, Phase 2)
+  memory:
+    enabled: false
+    backend: stub  # stub | vector | hybrid
